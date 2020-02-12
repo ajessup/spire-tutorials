@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: spire-ingress-two
+  namespace: spire
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: oidc-symbank-demo-ip
+#    networking.gke.io/managed-certificates: oidc-credential
+spec:
+  tls:
+    - hosts:
+        - oidc.symbank-demo.org
+      secretName: oidc-secret
+  rules:
+    - host: oidc.symbank-demo.org
+      http:
+        paths:
+          - path: /.well-known/openid-configuration
+            backend:
+              serviceName: spire-oidc
+              servicePort: 443
